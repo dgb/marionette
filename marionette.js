@@ -42,7 +42,7 @@ Marionette.Application = function(templatePath){
 					}
 					self.requestResponseData = json;
 					
-					// Todo: Use Link headers instead of custom ones
+					// Todo: Use Link headers instead of custom ones, and get rid of the template loader
 					var templateName = this.getResponseHeader('X-Marionette-Template');
 					var layout = this.getResponseHeader('X-Marionette-Layout') || 'layout';
 
@@ -75,7 +75,7 @@ Marionette.Application = function(templatePath){
 				self.dispatch(evt.target);
 			});
 			
-			// TODO: error handling
+			// TODO: error delegation
 			self.templates = JSON.parse(this.responseText);
 		}else{
 			// Throw a "Can't get Templates" Exception

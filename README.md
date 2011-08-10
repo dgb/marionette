@@ -26,5 +26,5 @@ Right now, Marionette serves as more of a proof of concept than anything else. H
 * Cross browser compatibility. This is caused by not having dependencies on any particular library.
 * Ensure compatibility with popular client side libraries.
 * Make a Rack middleware that detects incoming headers and modifies them appropriately (i.e. the Location header)
-* Use Link headers instead of customer headers for templates
+* Use Link headers instead of customer headers for templates and lazily load them.
 * Tests, dummy.
