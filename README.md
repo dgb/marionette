@@ -5,7 +5,7 @@ A Lightweight Client-side Application Library
 
 Marionette is inspired by HTTP and Sinatra.
 
-Many Javascript frameworks provide a heavy framework on the client that causes duplication in archetecture.
+Many Javascript frameworks provide a heavy framework on the client that causes duplication in architecture.
 
 Marionette eschews this, and instead has the client behave like its namesake. The idea is: we've already written this application for the server, so why not simply have the browser behave accordingly? Essentially, we design the client-side application so that its dispatch cycle mimics what would happen in a page-based, server side system, but taking advantage of lighter data-based payloads.
 
