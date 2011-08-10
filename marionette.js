@@ -3,12 +3,13 @@
 XMLHttpRequest (sorry IE6)
 JSON.parse
 addEventListener (sorry IE)
+FormData
 
 */
 
 var Marionette = {};
 
-Marionette.Application = function(templatePath){
+Marionette.Application = function(templatePath, ready){
 	/*
 		requestUrl
 		requestRunning
@@ -30,7 +31,9 @@ Marionette.Application = function(templatePath){
 				var redirect = this.getResponseHeader('X-Marionette-Location');
 				if(redirect){
 					this.open('GET', redirect);
-					this.setXHRHeaders();
+					// Yuck. Refactor with a request wrapper.
+					this.setRequestHeader('Accept', 'application/json;');
+					this.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 					this.send();
 				}else{
 					var json;
@@ -49,6 +52,7 @@ Marionette.Application = function(templatePath){
 					var rendered = Mustache.to_html(self.templates[templateName], json);
 					var laid = Mustache.to_html(self.templates[layout], {"yield":rendered})
 					
+					// Todo: Make main container configurable
 					var container = document.getElementById('container').innerHTML = laid;
 				}
 			}
@@ -77,6 +81,8 @@ Marionette.Application = function(templatePath){
 			
 			// TODO: error delegation
 			self.templates = JSON.parse(this.responseText);
+			
+			ready.call(this);
 		}else{
 			// Throw a "Can't get Templates" Exception
 		}
@@ -91,13 +97,16 @@ Marionette.Application.prototype.dispatch = function(element){
 	if(this.requestRunning) this.xhr.abort();
 	var method = element.method || 'GET';
 	var url = element.action || element.href; // what about data-method?
+	
+	var data = null;
+	// TODO: Fix tagname stuff to work accross doctypes
+	if(element.tagName == "FORM"){
+		data = new FormData(element);
+	}
+	
 	this.requestUrl = url;
 	this.xhr.open(method, url);
-	this.setXHRHeaders();
-	this.xhr.send();
-}
-
-Marionette.Application.prototype.setXHRHeaders = function(){
 	this.xhr.setRequestHeader('Accept', 'application/json;');
 	this.xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+	this.xhr.send(data);
 }
